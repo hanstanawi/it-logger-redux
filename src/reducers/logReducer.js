@@ -4,6 +4,10 @@ import {
   SET_LOADING,
   LOGS_ERROR,
   DELETE_LOG,
+  SET_CURRENT,
+  CLEAR_CURRENT,
+  UPDATE_LOG,
+  SEARCH_LOGS,
 } from '../actions/types';
 
 const initialState = {
@@ -27,11 +31,35 @@ const logReducer = (state = initialState, action) => {
         logs: [...state.logs, action.payload],
         loading: false,
       };
+    case SEARCH_LOGS:
+      return {
+        ...state,
+        logs: action.payload,
+        loading: false,
+      };
+    case UPDATE_LOG:
+      return {
+        ...state,
+        logs: state.logs.map((log) =>
+          log.id === action.payload.id ? action.payload : log
+        ),
+        loading: false,
+      };
     case DELETE_LOG:
       return {
         ...state,
         logs: state.logs.filter((log) => log.id !== action.payload),
         loading: false,
+      };
+    case SET_CURRENT:
+      return {
+        ...state,
+        currentLog: action.payload,
+      };
+    case CLEAR_CURRENT:
+      return {
+        ...state,
+        currentLog: null,
       };
     case SET_LOADING:
       return {

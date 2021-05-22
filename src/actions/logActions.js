@@ -4,6 +4,10 @@ import {
   SET_LOADING,
   DELETE_LOG,
   LOGS_ERROR,
+  SET_CURRENT,
+  CLEAR_CURRENT,
+  UPDATE_LOG,
+  SEARCH_LOGS,
 } from './types';
 
 // Fetch logs data from API
@@ -13,6 +17,24 @@ export const fetchLogs = () => async (dispatch) => {
     const data = await res.json();
     dispatch({
       type: GET_LOGS,
+      payload: data,
+    });
+  } catch (err) {
+    dispatch({
+      type: LOGS_ERROR,
+      payload: err.response.data,
+    });
+  }
+};
+
+// Search Logs
+export const searchLogs = (query) => async (dispatch) => {
+  try {
+    setLoading();
+    const res = await fetch(`/logs?q=${query}`);
+    const data = await res.json();
+    dispatch({
+      type: SEARCH_LOGS,
       payload: data,
     });
   } catch (err) {
@@ -47,6 +69,30 @@ export const addLog = (log) => async (dispatch) => {
   }
 };
 
+// Update Log to API
+export const updateLog = (log) => async (dispatch) => {
+  try {
+    setLoading();
+    const res = await fetch(`logs/${log.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(log),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await res.json();
+    dispatch({
+      type: UPDATE_LOG,
+      payload: data,
+    });
+  } catch (err) {
+    dispatch({
+      type: LOGS_ERROR,
+      payload: err.response.data,
+    });
+  }
+};
+
 // Delete Log from API
 export const deleteLog = (logId) => async (dispatch) => {
   try {
@@ -64,6 +110,21 @@ export const deleteLog = (logId) => async (dispatch) => {
       payload: err.response.data,
     });
   }
+};
+
+// Set Current Editing Log
+export const setCurrent = (log) => {
+  return {
+    type: SET_CURRENT,
+    payload: log,
+  };
+};
+
+// Clear current editing log
+export const clearCurrent = () => {
+  return {
+    type: CLEAR_CURRENT,
+  };
 };
 
 // Set Loading to true
