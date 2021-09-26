@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addLog } from '../../actions/logActions';
 import TechSelectOptions from '../techs/TechSelectOptions';
 
-const AddLogModal = ({ addLog }) => {
+const AddLogModal = () => {
+  const dispatch = useDispatch();
+
   const [message, setMessage] = useState('');
   const [attention, setAttention] = useState(false);
   const [tech, setTech] = useState('');
@@ -20,7 +22,7 @@ const AddLogModal = ({ addLog }) => {
         attention,
         date: new Date(),
       };
-      addLog(newLog);
+      dispatch(addLog(newLog));
       M.toast({ html: `Log added by ${tech}` });
       clearInputs();
     }
@@ -108,4 +110,4 @@ const modalStyle = {
   height: '45vh',
 };
 
-export default connect(null, { addLog })(AddLogModal);
+export default AddLogModal;

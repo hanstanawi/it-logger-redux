@@ -2,17 +2,19 @@ import React from 'react';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import Moment from 'react-moment';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { deleteLog, setCurrent } from '../../actions/logActions';
 
-const LogItem = ({ log, deleteLog, setCurrent }) => {
+const LogItem = ({ log }) => {
+  const dispatch = useDispatch();
+
   const onDelete = () => {
-    deleteLog(log.id);
+    dispatch(deleteLog(log.id));
     M.toast({ html: `Log #${log.id} removed` });
   };
 
   const onSetCurrent = () => {
-    setCurrent(log);
+    dispatch(setCurrent(log));
   };
 
   return (
@@ -41,8 +43,6 @@ const LogItem = ({ log, deleteLog, setCurrent }) => {
 
 LogItem.propTypes = {
   log: PropTypes.object.isRequired,
-  deleteLog: PropTypes.func.isRequired,
-  setCurrent: PropTypes.func.isRequired,
 };
 
-export default connect(null, { deleteLog, setCurrent })(LogItem);
+export default LogItem;

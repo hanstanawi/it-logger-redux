@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import Preloader from '../layout/Preloader';
 import LogItem from './LogItem';
 import { fetchLogs } from '../../actions/logActions';
 
-const Logs = ({ log: { loading, logs }, fetchLogs }) => {
+const Logs = () => {
+  const { logs, loading } = useSelector((state) => state.log);
+  const dispatch = useDispatch();
   useEffect(() => {
-    fetchLogs();
+    dispatch(fetchLogs());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -29,14 +30,4 @@ const Logs = ({ log: { loading, logs }, fetchLogs }) => {
   );
 };
 
-Logs.propTypes = {
-  log: PropTypes.object.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  return {
-    log: state.log,
-  };
-};
-
-export default connect(mapStateToProps, { fetchLogs })(Logs);
+export default Logs;
